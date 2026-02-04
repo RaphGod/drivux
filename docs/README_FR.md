@@ -44,7 +44,28 @@ Le client [abraunegg/onedrive](https://github.com/abraunegg/onedrive) pour Linux
 - [abraunegg/onedrive](https://github.com/abraunegg/onedrive) installe et configure en **services systemd utilisateur**
 - Python 3.10+
 
-## Installation rapide
+## Installation
+
+**Installation en une ligne** (recommande) :
+
+```bash
+curl -sSL https://raw.githubusercontent.com/RaphGod/drivux/main/install.sh | bash
+```
+
+L'installeur va :
+- Telecharger Drivux dans `~/.local/share/drivux`
+- Creer un environnement Python avec les dependances
+- Creer la commande `drivux` dans `~/.local/bin`
+- Ajouter Drivux au menu des applications
+- Proposer le demarrage automatique a la connexion
+
+Puis lancez simplement :
+```bash
+drivux
+```
+
+<details>
+<summary>Installation manuelle</summary>
 
 ```bash
 git clone https://github.com/RaphGod/drivux.git
@@ -55,23 +76,13 @@ pip install -e .
 drivux
 ```
 
-## Demarrage automatique
+</details>
+
+### Desinstallation
 
 ```bash
-mkdir -p ~/.config/autostart
-cat > ~/.config/autostart/drivux.desktop << 'EOF'
-[Desktop Entry]
-Type=Application
-Name=Drivux
-Comment=Gestionnaire de synchronisation OneDrive
-Exec=/chemin/vers/drivux/.venv/bin/drivux
-Icon=cloud
-StartupNotify=false
-X-GNOME-Autostart-enabled=true
-EOF
+curl -sSL https://raw.githubusercontent.com/RaphGod/drivux/main/uninstall.sh | bash
 ```
-
-Remplacez `/chemin/vers/drivux` par votre chemin d'installation.
 
 ## Fonctionnement
 

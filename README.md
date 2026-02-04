@@ -72,7 +72,28 @@ The [abraunegg/onedrive](https://github.com/abraunegg/onedrive) client for Linux
 - [abraunegg/onedrive](https://github.com/abraunegg/onedrive) installed and running as **systemd user services**
 - Python 3.10+
 
-## Quick start
+## Installation
+
+**One-line install** (recommended):
+
+```bash
+curl -sSL https://raw.githubusercontent.com/RaphGod/drivux/main/install.sh | bash
+```
+
+This will:
+- Download Drivux to `~/.local/share/drivux`
+- Set up a Python virtual environment with dependencies
+- Create the `drivux` command in `~/.local/bin`
+- Add Drivux to your application menu
+- Optionally enable autostart at login
+
+Then just run:
+```bash
+drivux
+```
+
+<details>
+<summary>Manual installation</summary>
 
 ```bash
 git clone https://github.com/RaphGod/drivux.git
@@ -83,23 +104,13 @@ pip install -e .
 drivux
 ```
 
-## Autostart at login
+</details>
+
+### Uninstall
 
 ```bash
-mkdir -p ~/.config/autostart
-cat > ~/.config/autostart/drivux.desktop << 'EOF'
-[Desktop Entry]
-Type=Application
-Name=Drivux
-Comment=OneDrive sync manager
-Exec=/path/to/drivux/.venv/bin/drivux
-Icon=cloud
-StartupNotify=false
-X-GNOME-Autostart-enabled=true
-EOF
+curl -sSL https://raw.githubusercontent.com/RaphGod/drivux/main/uninstall.sh | bash
 ```
-
-Replace `/path/to/drivux` with your actual install path.
 
 ## How it works
 
