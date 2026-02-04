@@ -11,6 +11,7 @@ from PySide6.QtGui import QColor, QIcon, QAction
 from .service_manager import ServiceManager
 from .log_viewer import LogViewer
 from .settings_dialog import SettingsDialog
+from .i18n import t
 
 
 class MainWindow(QMainWindow):
@@ -40,14 +41,14 @@ class MainWindow(QMainWindow):
         top_layout.setContentsMargins(0, 0, 0, 0)
 
         header_layout = QHBoxLayout()
-        header_layout.addWidget(QLabel("Services OneDrive"))
+        header_layout.addWidget(QLabel(f"{t('services')} OneDrive"))
         header_layout.addStretch()
 
-        btn_refresh = QPushButton("Actualiser")
+        btn_refresh = QPushButton(t("refresh"))
         btn_refresh.clicked.connect(self._refresh_status)
         header_layout.addWidget(btn_refresh)
 
-        btn_settings = QPushButton("Parametres")
+        btn_settings = QPushButton(t("settings"))
         btn_settings.clicked.connect(self._open_settings)
         header_layout.addWidget(btn_settings)
 
@@ -55,7 +56,7 @@ class MainWindow(QMainWindow):
 
         self._table = QTableWidget(0, 5)
         self._table.setHorizontalHeaderLabels([
-            "Service", "Statut", "Dossier", "PID", "Actions"
+            t("service"), t("status"), t("folder"), t("pid"), t("actions")
         ])
         self._table.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeMode.Stretch
@@ -87,11 +88,11 @@ class MainWindow(QMainWindow):
             self._table.setItem(row, 0, QTableWidgetItem(label))
 
             # Status
-            status_item = QTableWidgetItem("Actif" if st.active else "Inactif")
+            status_item = QTableWidgetItem(t("active") if st.active else t("inactive"))
             if st.active:
                 errors = self._service_mgr.has_recent_errors(st.name)
                 if errors:
-                    status_item.setText("Erreur")
+                    status_item.setText(t("error"))
                     status_item.setForeground(QColor("#f38ba8"))
                 else:
                     status_item.setForeground(QColor("#a6e3a1"))
@@ -111,17 +112,17 @@ class MainWindow(QMainWindow):
             actions_layout.setContentsMargins(4, 2, 4, 2)
 
             if st.active:
-                btn_restart = QPushButton("Redemarrer")
+                btn_restart = QPushButton(t("restart"))
                 btn_restart.setProperty("service", st.name)
                 btn_restart.clicked.connect(self._restart_service)
                 actions_layout.addWidget(btn_restart)
 
-                btn_stop = QPushButton("Stop")
+                btn_stop = QPushButton(t("stop"))
                 btn_stop.setProperty("service", st.name)
                 btn_stop.clicked.connect(self._stop_service)
                 actions_layout.addWidget(btn_stop)
             else:
-                btn_start = QPushButton("Demarrer")
+                btn_start = QPushButton(t("start"))
                 btn_start.setProperty("service", st.name)
                 btn_start.clicked.connect(self._start_service)
                 actions_layout.addWidget(btn_start)
@@ -159,14 +160,14 @@ class MainWindow(QMainWindow):
 
         menu = QMenu(self)
         if st.active:
-            menu.addAction("Redemarrer", lambda: (
+            menu.addAction(t("restart"), lambda: (
                 self._service_mgr.restart(st.name), self._refresh_status()
             ))
-            menu.addAction("Arreter", lambda: (
+            menu.addAction(t("stop"), lambda: (
                 self._service_mgr.stop(st.name), self._refresh_status()
             ))
         else:
-            menu.addAction("Demarrer", lambda: (
+            menu.addAction(t("start"), lambda: (
                 self._service_mgr.start(st.name), self._refresh_status()
             ))
         menu.exec(self._table.viewport().mapToGlobal(pos))

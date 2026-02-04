@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
 
 from .config_manager import ConfigManager, CONFIG_KEYS
 from .service_manager import ServiceManager, ServiceStatus
+from .i18n import t
 
 
 class ServiceConfigTab(QWidget):
@@ -21,23 +22,24 @@ class ServiceConfigTab(QWidget):
         self._status = status
         self._config = ConfigManager(status.confdir / "config")
         self._widgets: dict[str, QWidget] = {}
+        self._config_group_title = t("configuration")
         self._setup_ui()
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
 
         # Service info
-        info_group = QGroupBox("Service")
+        info_group = QGroupBox(t("service"))
         info_layout = QFormLayout(info_group)
-        info_layout.addRow("Nom:", QLabel(self._status.display_name))
-        info_layout.addRow("Statut:", QLabel(
-            f"{'Actif' if self._status.active else 'Inactif'} (PID {self._status.pid})"
+        info_layout.addRow(f"{t('name')}:", QLabel(self._status.display_name))
+        info_layout.addRow(f"{t('status')}:", QLabel(
+            f"{t('active') if self._status.active else t('inactive')} (PID {self._status.pid})"
         ))
-        info_layout.addRow("Config:", QLabel(str(self._status.confdir / "config")))
+        info_layout.addRow(f"{t('config_path')}:", QLabel(str(self._status.confdir / "config")))
         layout.addWidget(info_group)
 
         # Config values
-        config_group = QGroupBox("Configuration")
+        config_group = QGroupBox(self._config_group_title)
         form = QFormLayout(config_group)
 
         current = self._config.read()
@@ -53,13 +55,13 @@ class ServiceConfigTab(QWidget):
         layout.addWidget(config_group)
 
         # Add new parameter
-        add_group = QGroupBox("Ajouter un parametre")
+        add_group = QGroupBox(t("add_parameter"))
         add_layout = QHBoxLayout(add_group)
         self._new_key = QLineEdit()
-        self._new_key.setPlaceholderText("cle")
+        self._new_key.setPlaceholderText(t("key"))
         add_layout.addWidget(self._new_key)
         self._new_value = QLineEdit()
-        self._new_value.setPlaceholderText("valeur")
+        self._new_value.setPlaceholderText(t("value"))
         add_layout.addWidget(self._new_value)
         btn_add = QPushButton("+")
         btn_add.setFixedWidth(40)
@@ -77,9 +79,8 @@ class ServiceConfigTab(QWidget):
         widget = QLineEdit(value)
         desc = CONFIG_KEYS.get(key, key)
         widget.setToolTip(desc)
-        # Find the config group and add to its layout
         for group in self.findChildren(QGroupBox):
-            if group.title() == "Configuration":
+            if group.title() == self._config_group_title:
                 group.layout().addRow(f"{key}:", widget)
                 break
         self._widgets[key] = widget
@@ -97,7 +98,7 @@ class ServiceConfigTab(QWidget):
             self._config.write(config)
             return True
         except Exception as e:
-            QMessageBox.critical(self, "Erreur", f"Impossible de sauvegarder:\n{e}")
+            QMessageBox.critical(self, t("error"), f"{t('save_error')}\n{e}")
             return False
 
 
@@ -107,7 +108,7 @@ class SettingsDialog(QDialog):
     def __init__(self, service_mgr: ServiceManager, parent=None):
         super().__init__(parent)
         self._service_mgr = service_mgr
-        self.setWindowTitle("Drivux - Parametres")
+        self.setWindowTitle(f"Drivux - {t('settings')}")
         self.setMinimumSize(600, 500)
         self._tabs: list[ServiceConfigTab] = []
         self._setup_ui()
@@ -117,7 +118,7 @@ class SettingsDialog(QDialog):
 
         self._tab_widget = QTabWidget()
         for status in self._service_mgr.get_all_statuses():
-            label = status.name.replace("onedrive-", "").replace("onedrive", "perso")
+            label = status.name.replace("onedrive-", "").replace("onedrive", t("personal"))
             tab = ServiceConfigTab(status)
             self._tab_widget.addTab(tab, label)
             self._tabs.append(tab)
@@ -127,15 +128,15 @@ class SettingsDialog(QDialog):
         btn_layout = QHBoxLayout()
         btn_layout.addStretch()
 
-        btn_save = QPushButton("Sauvegarder")
+        btn_save = QPushButton(t("save"))
         btn_save.clicked.connect(self._save_all)
         btn_layout.addWidget(btn_save)
 
-        btn_save_restart = QPushButton("Sauvegarder && Redemarrer")
+        btn_save_restart = QPushButton(t("save_restart"))
         btn_save_restart.clicked.connect(self._save_and_restart)
         btn_layout.addWidget(btn_save_restart)
 
-        btn_cancel = QPushButton("Annuler")
+        btn_cancel = QPushButton(t("cancel"))
         btn_cancel.clicked.connect(self.reject)
         btn_layout.addWidget(btn_cancel)
 
@@ -144,7 +145,7 @@ class SettingsDialog(QDialog):
     def _save_all(self) -> bool:
         all_ok = all(tab.save() for tab in self._tabs)
         if all_ok:
-            QMessageBox.information(self, "Drivux", "Configuration sauvegardee.")
+            QMessageBox.information(self, "Drivux", t("config_saved"))
             self.accept()
         return all_ok
 
@@ -153,4 +154,4 @@ class SettingsDialog(QDialog):
             return
         for status in self._service_mgr.get_all_statuses():
             self._service_mgr.restart(status.name)
-        QMessageBox.information(self, "Drivux", "Services redemarres.")
+        QMessageBox.information(self, "Drivux", t("services_restarted"))

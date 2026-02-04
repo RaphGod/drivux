@@ -12,6 +12,7 @@ from pathlib import Path
 from . import __version__, __app_name__
 from .service_manager import ServiceManager
 from .main_window import MainWindow
+from .i18n import t
 
 
 ICONS_DIR = Path(__file__).parent / "resources" / "icons"
@@ -70,7 +71,7 @@ class DrivuxTray(QSystemTrayIcon):
         # Service statuses (will be updated dynamically)
         self._status_actions: list[QAction] = []
         for svc in self._service_mgr.services:
-            label = svc.replace("onedrive-", "").replace("onedrive", "perso")
+            label = svc.replace("onedrive-", "").replace("onedrive", t("personal"))
             action = menu.addAction(f"  {label}: ...")
             action.setEnabled(False)
             self._status_actions.append(action)
@@ -78,41 +79,40 @@ class DrivuxTray(QSystemTrayIcon):
         menu.addSeparator()
 
         # Actions
-        menu.addAction("Ouvrir Drivux", self._show_window)
-        menu.addAction("Tout redemarrer", self._restart_all)
+        menu.addAction(t("open_drivux"), self._show_window)
+        menu.addAction(t("restart_all"), self._restart_all)
         menu.addSeparator()
-        menu.addAction("Quitter", self._quit)
+        menu.addAction(t("quit"), self._quit)
 
         self.setContextMenu(menu)
 
     def _update_status(self):
         statuses = self._service_mgr.get_all_statuses()
         has_error = False
-        has_syncing = False
 
         for i, st in enumerate(statuses):
             if i >= len(self._status_actions):
                 break
-            label = st.name.replace("onedrive-", "").replace("onedrive", "perso")
+            label = st.name.replace("onedrive-", "").replace("onedrive", t("personal"))
 
             if not st.active:
-                self._status_actions[i].setText(f"  {label}: arrete")
+                self._status_actions[i].setText(f"  {label}: {t('stopped')}")
                 has_error = True
             else:
                 errors = self._service_mgr.has_recent_errors(st.name)
                 if errors:
-                    self._status_actions[i].setText(f"  {label}: ERREUR")
+                    self._status_actions[i].setText(f"  {label}: {t('error').upper()}")
                     has_error = True
                 else:
-                    self._status_actions[i].setText(f"  {label}: OK")
+                    self._status_actions[i].setText(f"  {label}: {t('ok')}")
 
         # Update tray icon
         if has_error:
             self.setIcon(self._icons.get("error", self.style_icon()))
-            self.setToolTip(f"{__app_name__} - Erreur detectee")
+            self.setToolTip(f"{__app_name__} - {t('error_detected')}")
         else:
             self.setIcon(self._icons.get("ok", self.style_icon()))
-            self.setToolTip(f"{__app_name__} - Tout est OK")
+            self.setToolTip(f"{__app_name__} - {t('all_ok')}")
 
     def _on_activated(self, reason):
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
@@ -145,7 +145,7 @@ def main():
     service_mgr = ServiceManager()
 
     if not service_mgr.services:
-        print("Aucun service onedrive detecte.")
+        print(t("no_service"))
         sys.exit(1)
 
     tray = DrivuxTray(service_mgr, app)

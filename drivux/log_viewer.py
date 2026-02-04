@@ -9,6 +9,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QTextCharFormat, QColor, QFont
 
+from .i18n import t
+
 
 class LogStream(QObject):
     """Streams journalctl output for a service."""
@@ -62,22 +64,22 @@ class LogViewer(QWidget):
 
         # Toolbar
         toolbar = QHBoxLayout()
-        toolbar.addWidget(QLabel("Service:"))
+        toolbar.addWidget(QLabel(f"{t('service')}:"))
 
         self._combo = QComboBox()
         for name in self._service_names:
-            label = name.replace("onedrive-", "").replace("onedrive", "perso")
+            label = name.replace("onedrive-", "").replace("onedrive", t("personal"))
             self._combo.addItem(label, name)
         self._combo.currentIndexChanged.connect(self._on_service_changed)
         toolbar.addWidget(self._combo, 1)
 
-        toolbar.addWidget(QLabel("Filtre:"))
+        toolbar.addWidget(QLabel(f"{t('filter')}:"))
         self._filter = QLineEdit()
-        self._filter.setPlaceholderText("ex: error, download, sync...")
+        self._filter.setPlaceholderText(t("filter_placeholder"))
         self._filter.textChanged.connect(self._apply_filter)
         toolbar.addWidget(self._filter, 1)
 
-        self._btn_clear = QPushButton("Effacer")
+        self._btn_clear = QPushButton(t("clear"))
         self._btn_clear.clicked.connect(self._clear_logs)
         toolbar.addWidget(self._btn_clear)
 
