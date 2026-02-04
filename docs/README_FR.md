@@ -104,6 +104,14 @@ Microsoft OneDrive / SharePoint
 
 Les contributions sont les bienvenues ! N'hesitez pas a ouvrir des issues ou des pull requests.
 
+## Sponsors
+
+<a href="https://dogma.fr">
+  <img src="https://img.shields.io/badge/Developpe%20par-Dogma-blue?style=flat" alt="Dogma">
+</a>
+
+Drivux est developpe et maintenu par [Dogma](https://dogma.fr), societe de conseil en informatique.
+
 ## Licence
 
-[MIT](../LICENSE)
+[GPL-3.0](../LICENSE)

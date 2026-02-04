@@ -41,16 +41,59 @@ echo "[OK] Python $PY_VERSION"
 # Check onedrive
 if ! command -v onedrive &>/dev/null; then
     echo "WARNING: onedrive client (abraunegg) not found."
-    echo "Drivux requires it to work. Install from:"
-    echo "  https://github.com/abraunegg/onedrive"
+    echo "Drivux requires it to work."
     echo ""
-    read -p "Continue anyway? [y/N] " -n 1 -r
+    read -p "Install onedrive client automatically? [Y/n] " -n 1 -r
     echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        echo "[..] Installing onedrive client..."
+        # Detect distro and install
+        if command -v apt &>/dev/null; then
+            # Debian/Ubuntu - add PPA
+            if ! grep -q "abraunegg" /etc/apt/sources.list.d/* 2>/dev/null; then
+                echo "[..] Adding abraunegg PPA..."
+                sudo apt-get install -y -qq software-properties-common > /dev/null 2>&1
+                sudo add-apt-repository -y ppa:yann1ck/onedrive > /dev/null 2>&1
+                sudo apt-get update -qq > /dev/null 2>&1
+            fi
+            sudo apt-get install -y -qq onedrive > /dev/null 2>&1
+        elif command -v dnf &>/dev/null; then
+            # Fedora/RHEL
+            sudo dnf install -y -q onedrive > /dev/null 2>&1
+        elif command -v pacman &>/dev/null; then
+            # Arch
+            sudo pacman -S --noconfirm onedrive-abraunegg 2>/dev/null || \
+                echo "NOTE: Install from AUR: yay -S onedrive-abraunegg"
+        elif command -v zypper &>/dev/null; then
+            # openSUSE
+            sudo zypper install -y onedrive > /dev/null 2>&1
+        else
+            echo "ERROR: Could not detect package manager."
+            echo "Please install onedrive manually from:"
+            echo "  https://github.com/abraunegg/onedrive"
+            exit 1
+        fi
+
+        if command -v onedrive &>/dev/null; then
+            echo "[OK] OneDrive client installed"
+        else
+            echo "ERROR: Installation failed. Please install manually from:"
+            echo "  https://github.com/abraunegg/onedrive"
+            read -p "Continue without onedrive? [y/N] " -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                exit 1
+            fi
+        fi
+    else
+        read -p "Continue without onedrive? [y/N] " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            exit 1
+        fi
     fi
 else
-    echo "[OK] OneDrive client found"
+    echo "[OK] OneDrive client found ($(onedrive --version 2>&1 | head -1))"
 fi
 
 # Clone or update

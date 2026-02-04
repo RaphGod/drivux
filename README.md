@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/RaphGod/drivux/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
+  <a href="https://github.com/RaphGod/drivux/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="License"></a>
   <img src="https://img.shields.io/badge/python-3.10+-green" alt="Python">
   <img src="https://img.shields.io/badge/Qt6-PySide6-41cd52" alt="Qt">
   <img src="https://img.shields.io/badge/desktop-KDE%20%7C%20GNOME%20%7C%20XFCE-blue" alt="Desktop">
@@ -132,6 +132,14 @@ Microsoft OneDrive / SharePoint
 
 Contributions are welcome! Feel free to open issues or pull requests.
 
+## Sponsors
+
+<a href="https://dogma.fr">
+  <img src="https://img.shields.io/badge/Built%20by-Dogma-blue?style=flat" alt="Dogma">
+</a>
+
+Drivux is developed and maintained by [Dogma](https://dogma.fr), a French IT consulting company.
+
 ## License
 
-[MIT](LICENSE)
+[GPL-3.0](LICENSE)
