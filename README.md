@@ -20,6 +20,27 @@
   <a href="README.md">English</a> | <a href="docs/README_FR.md">Fran&ccedil;ais</a>
 </p>
 
+<details>
+<summary>🌍 Available in your language / Disponible dans votre langue</summary>
+
+<br>
+
+| | Language | Description |
+|---|---------|------------|
+| 🇬🇧 | **English** | GUI manager for OneDrive on Linux. Monitor, configure and control your sync services from the system tray. |
+| 🇫🇷 | **Fran&ccedil;ais** | Gestionnaire graphique pour OneDrive sur Linux. Surveillez, configurez et controlez vos services de synchronisation depuis le systray. [Lire en fran&ccedil;ais](docs/README_FR.md) |
+| 🇪🇸 | **Espa&ntilde;ol** | Gestor grafico para OneDrive en Linux. Supervise, configure y controle sus servicios de sincronizacion desde la bandeja del sistema. |
+| 🇩🇪 | **Deutsch** | GUI-Manager fur OneDrive unter Linux. Uberwachen, konfigurieren und steuern Sie Ihre Synchronisierungsdienste uber das System-Tray. |
+| 🇵🇹 | **Portugu&ecirc;s** | Gerenciador grafico para OneDrive no Linux. Monitore, configure e controle seus servicos de sincronizacao pela bandeja do sistema. |
+| 🇷🇺 | **Русский** | Графический менеджер для OneDrive в Linux. Отслеживайте, настраивайте и управляйте сервисами синхронизации из системного трея. |
+| 🇨🇳 | **中文** | Linux 上的 OneDrive 图形管理工具。通过系统托盘监控、配置和控制您的同步服务。 |
+| 🇯🇵 | **日本語** | Linux 用 OneDrive GUI マネージャー。システムトレイから同期サービスの監視、設定、制御ができます。 |
+| 🇮🇳 | **हिन्दी** | Linux पर OneDrive के लिए ग्राफिकल मैनेजर। सिस्टम ट्रे से अपनी सिंक सेवाओं की निगरानी, कॉन्फ़िगरेशन और नियंत्रण करें। |
+| 🇰🇷 | **한국어** | Linux용 OneDrive GUI 관리자. 시스템 트레이에서 동기화 서비스를 모니터링, 구성 및 제어하세요. |
+| 🇸🇦 | **العربية** | مدير رسومي لـ OneDrive على Linux. راقب وهيئ وتحكم في خدمات المزامنة من شريط النظام. |
+
+</details>
+
 ---
 
 ## Why Drivux?
